@@ -1,0 +1,37 @@
+{
+  "name": "mx.utxj.ti.awos.bienesraices",
+  "version": "1.0.0",
+  "description": "Proyecto de clase para la unidad 2, de AWOS utilizando Node.js",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "saluda": "node saluda.js",
+    "server": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Danny88e/BienesRaices_230040.git"
+  },
+  "keywords": [
+    "MVC",
+    "Express",
+    "Sequelize",
+    "MySQL",
+    "TailwindCSS",
+    "Nodemon",
+    "Node.js",
+    "PUG",
+    "Nodemailer",
+    "Mailtrap",
+    "JWT"
+  ],
+  "author": "Luis Daniel Suarez Escamilla",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Danny88e/BienesRaices_230040/issues"
+  },
+  "homepage": "https://github.com/Danny88e/BienesRaices_230040#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

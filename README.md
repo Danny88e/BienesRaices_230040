@@ -9,8 +9,8 @@ Para poder demostrar y aprender la creacion y consumo de Interfaces de Programac
 
 |No.|Fecha|Descripcion|Potenciador|Estatus|
 |--|--|--|--|--|
-|8.|17/10/24|Nuevo Repositorio del Proyecto Implementando .GitIgnore|1|Finalizada|
-|9.|22/10/24|Creacion de una aplicacion web usando Express|11|Finalizada|
+|8.|17/10/24|Nuevo Repositorio del Proyecto Implementando .GitIgnore|1|Finalizada ✅|
+|9.|22/10/24|Creacion de una aplicacion web usando Express|12|Finalizada ✅|
 
 
 ### Autor
@@ -19,3 +19,4 @@ Unidad 2
 Aplicaciones Web Orientadas a Servicios
 Octubre 2024
 
+⚠️

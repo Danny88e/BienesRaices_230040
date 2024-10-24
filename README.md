@@ -9,7 +9,9 @@ Para poder demostrar y aprender la creacion y consumo de Interfaces de Programac
 
 |No.|Fecha|Descripcion|Potenciador|Estatus|
 |--|--|--|--|--|
-|8.|17/10/24|Nuevo Repositorio del Proyecto Implementando .GitIgnore|1|Activa|
+|8.|17/10/24|Nuevo Repositorio del Proyecto Implementando .GitIgnore|1|Finalizada|
+|9.|22/10/24|Creacion de una aplicacion web usando Express|11|Finalizada|
+
 
 ### Autor
 **Luis Daniel Suarez Escamilla** / [@Danny88e](https://github.com/Danny88e)

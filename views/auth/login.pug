@@ -1,0 +1,23 @@
+extends ../layout-layout/index
+
+bloxk contenido 
+    .py-10 
+        h1.text-4x1.my-10.font-extrabold.text-center.text-bluee Bienes 
+            span.font-normal.text-pinkk Raices 
+        h2.text-center.text-2x1.font-extrabold=page 
+
+        .mt-8.mx-auto-max-w-md 
+            .bg-dani.py-8.px-4.shadow 
+                form(action="").space-y-5.px-6
+                    div 
+                        label.block.text-sm.uppercase.text-gray-600.mb-2.font-bold Correo Electronico
+                        input#email.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder
+                    div 
+                        label.block.text-sm.uppercase.text-gray-600.mb-2.font-bold Contraseña
+                        input#email-w-full.px-3.py-2.border.border-gray-300.rounded-x1.placeholder
+
+                    .flex.items-center.justify-between
+                        a.text-gray-500-text-xs(href="/auth/createAccount" class="hover:underline hover:decoration-2 hover:decoration-red-600")¿Aun no tienes tu cuenta?, Registrate 
+                        a.text-gray-500.text-xs(href="/auth/passwordRecovery" class="hover:underline hover:decoration-2 hover:decoration-red-600") Olvide mi Contraseña...
+
+                    input(class="w-full bg-black hover:bg- text-white font-bold py-3 cursor-pointer" type="submit" value="Ingresar")

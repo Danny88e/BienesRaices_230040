@@ -12,8 +12,8 @@ Para poder demostrar y aprender la creacion y consumo de Interfaces de Programac
 |8.|17/10/24|Nuevo Repositorio del Proyecto Implementando .GitIgnore|1|Finalizada ✅|
 |9.|22/10/24|Creacion de una aplicacion web usando Express|12|Finalizada ✅|
 |10.|23/10/24|Operaciones Básicas de un API a través de los verbos HTTP|12|Finalizada ✅|
-|11.|24/10/24|Implementaacion de las pantallas de registro, Logeo y Recuperacion de Contraseñas|13|Activa|
-
+|11.|24/10/24|Implementaacion de las pantallas de registro, Logeo y Recuperacion de Contraseñas|13|Finalizada ✅|
+|12.|07/10/24||??|Activa|
 
 
 ### Autor

@@ -6,12 +6,31 @@
 import express from 'express';
 import generalRoutes from './routes/generalRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import db from './db/db.js';
+
+// Crear la app
 const app = express(); 
 
+// Conexión a la BD
+try {
+    await db.authenticate();
+    db.sync()
+    console.log("Conexión exitosa a la base de datos.")
+} catch (error) {
+    console.log(error)
+}
+
+// Habilitar Pug
 app.set('view engine','pug')
 app.set('views','./views')
+
 // Definir la carpeta pública de recursos estáticos (assets)
+
 app.use(express.static('public'))
+
+// Habilitar lectura de datos de formularios 
+
+app.use(express.urlencoded({extended:true}))
 
 // COnfiguramos nuestro servidor web
 const port = 3000;
@@ -23,4 +42,4 @@ app.listen(port, ()=>{
 app.use('/',generalRoutes);
 app.use('/usuario',userRoutes);
 
-//
+// 

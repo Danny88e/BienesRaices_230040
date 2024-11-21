@@ -29,12 +29,13 @@
   "author": "Jesús Domínguez Ramírez",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hesuh05/BienesRaices_230028/issues"
+    "url": "https://github.com/Danny88e/BienesRaices_230040/issues"
   },
-  "homepage": "https://github.com/hesuh05/BienesRaices_230028#readme",
+  "homepage": "https://github.com/Danny88e/BienesRaices_230040#readme",
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "express-validator": "^7.2.0",
     "mysql2": "^3.11.4",
     "pug": "^3.0.3",
     "sequelize": "^6.37.5"

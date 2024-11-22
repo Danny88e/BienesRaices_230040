@@ -1,6 +1,7 @@
 import { check, validationResult } from 'express-validator'
-import { generarId } from '../helpers/token.js'
+import { generateId } from '../helpers/token.js'
 import Usuario from "../models/Usuario.js"
+import { emailRegister } from '../helpers/emails.js'
 
 const formularioLogin = (request, response) => 
     response.render('auth/login',{
@@ -46,22 +47,30 @@ const formularioRegistrar = async (request, response) => {
         response.json(resultado.array())
         const usuario = await Usuario.create(request.body)
         response.json(usuario)*/
-    } else { 
-        await Usuario.create({
-            nombre,
-            email,
-            password,
-            token: generarId()
-        })
-        /*return response.render('auth/register.pug',{
-            pagina: 'Crear Cuenta',
-            mensaje: 'Cuenta creada!'
-        })*/
-       response.render('templates/mensaje',{
-            page: 'Cuenta Creada Correctamente',
-            mensaje: 'Se ha enviado un email de confirmación'
-       })
-    }
+    } 
+    const usuario = await Usuario.create({
+        nombre,
+        email,
+        password,
+        token: generateId()
+    })
+    // Envia email de confirmación
+    emailRegister({
+        nombre: usuario.nombre,
+        email: usuario.email,
+        token: usuario.token
+    })
+    /*return response.render('auth/register.pug',{
+    pagina: 'Crear Cuenta',
+    mensaje: 'Cuenta creada!'
+    })*/
+    response.render('templates/mensaje',{
+        page: 'Cuenta Creada Correctamente',
+        message1: "Hemos enviado un correo a: ",
+        message2: " para la confirmación de cuenta",
+        email: email
+    })
+    
 }
 
 const formularioPasswordRecovery = (request, response) => 

@@ -4,6 +4,8 @@
 
 
 import express from 'express';
+import csrf from 'csurf'
+import cookieParser from 'cookie-parser'
 import generalRoutes from './routes/generalRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import db from './db/db.js';
@@ -42,4 +44,8 @@ app.listen(port, ()=>{
 app.use('/',generalRoutes);
 app.use('/usuario',userRoutes);
 
-// 
+// Habilitar Cookie Parser
+app.use(cookieParser())
+
+// Habilitar CSRF
+app.use(csrf({cookie:true}))

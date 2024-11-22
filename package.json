@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Danny88e/BienesRaices_230040.git"
+    "url": "git+https://github.com/hesuh05/BienesRaices_230028.git"
   },
   "keywords": [
     "MVC",
@@ -31,9 +31,11 @@
   "bugs": {
     "url": "https://github.com/hesuh05/BienesRaices_230028/issues"
   },
-  "homepage": "https://github.com/hesuh05/BienesRaices_230040#readme",
+  "homepage": "https://github.com/hesuh05/BienesRaices_230028#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "csurf": "^1.11.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-validator": "^7.2.0",

@@ -2,6 +2,10 @@ import { check, validationResult } from 'express-validator'
 import { generateId } from '../helpers/token.js'
 import Usuario from "../models/Usuario.js"
 import { emailRegister } from '../helpers/emails.js'
+import dotenv from 'dotenv'
+import req from 'express/lib/request.js'
+import { response } from 'express'
+dotenv.config({path: '.env'})
 
 const formularioLogin = (request, response) => 
     response.render('auth/login',{
@@ -9,9 +13,11 @@ const formularioLogin = (request, response) =>
 })
 
 const formularioRegister = (request, response) => 
+    console.log(request.csrfToken())
     response.render('auth/register',{
-    pagina: "Crea tu cuenta"
-})
+        pagina: "Crea tu cuenta"
+    }
+)
 
 const formularioRegistrar = async (request, response) => {
     // Validación
@@ -78,4 +84,29 @@ const formularioPasswordRecovery = (request, response) =>
     pagina: "Recuperar contraseña"
 })
 
-export{formularioLogin, formularioRegister, formularioRegistrar, formularioPasswordRecovery}
+const confirm = async (request, response) =>
+    {
+        const {token} = request.params
+        const userWithToken = await Usuario.findOne({where:{token}})
+
+        if(!userWithToken){
+                response.render('auth/confirmAccount',{
+                    message: "Porfavor verifica la liga, ya que el token no existe/caduco. Si aún no puedes acceder puedes restaurar tu cuenta en el siguiente enlace:",
+                    error: true,
+                    page: "Error de verificación",  
+                    link: `${process.env.BACKEND_DOMAIN}:${process.env.BACKEND_PORT}/usuario/passwordRecovery`
+            })
+        } else {
+            userWithToken.token = null;
+            userWithToken.confirmado = true;
+            await userWithToken.save();
+        }
+        response.render('auth/confirmAccount',{
+            page: 'Cuenta Confirmada',
+            message: "La cuenta se ha confirmado de manera exitosa!",
+            link: `${process.env.BACKEND_DOMAIN}:${process.env.BACKEND_PORT}/usuario/passwordRecovery`
+        })
+        
+    }
+
+export{formularioLogin, formularioRegister, formularioRegistrar, formularioPasswordRecovery, confirm}

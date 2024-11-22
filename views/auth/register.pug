@@ -5,19 +5,26 @@ block contenido
         h1.text-center.text-4xl.my-10.font-extrabold.text-black Bienes
             span.font-normal.text-am1-300  Raíces
         h2.text-center.font-extrabold.text-2xl=page
+        if duplicado
+            div(class="max-w-md mx-auto my-10")
+                p.bg-alertcoloro.text-white.text-xs.text-center.p-2.mb-1.font-bold=duplicado
         if errores 
             div(class="max-w-md mx-auto my-10")
                 each error in errores 
-                    p.bg-alertcolor.text-white.uppercase.text-xs.text-center.p-2.mb-1.font-bold= error.msg
+                    p.bg-alertcolorr.text-white.uppercase.text-xs.text-center.p-2.mb-1.font-bold=error.msg
+                    
+        if mensaje 
+            div(class="max-w-md mx-auto my-10")
+                p.bg-alertcolorg.text-white.uppercase.text-xs.text-center.p-2.mb-1.font-bold=mensaje
         .mt-8.mx-auto.max-w-md 
             .bg-white.py-8.px-4.shadow 
                 form(method="POST" action="/usuario/createAccount" noValidate).space-y-5.px-6
                     div 
                         label.block.text-sm.uppercase.text.-gray-600.mb-2.font-bold Nombre Completo: 
-                        input#name.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="text" placeholder="Ingresa tu nombre con apellidos" name="nombre")
+                        input#name.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="text" placeholder="Ingresa tu nombre con apellidos" name="nombre" value=usuario ? usuario.nombre : '')
                     div 
                         label.block.text-sm.uppercase.text-gray-600.mb-2.font-bold Correo Electrónico: 
-                        input#email.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="email" placeholder="ej: usuario@dominio.com" name="email")
+                        input#email.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="email" placeholder="ej: usuario@dominio.com" name="email" value=usuario ? usuario.email : '')
                     div 
                         label.block.text-sm.uppercase.text-gray-600.mb-2.font-bold Contraseña: 
                         input#password.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="password" placeholder="Mínimo de 8 carácteres" name="password")

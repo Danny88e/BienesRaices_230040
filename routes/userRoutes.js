@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/findByID/:id", function (request,response){
     response.send(`Se esta solicitando buscar al usuario con ID: ${request.params.id}`)
 })
-// 2 componentes de una petición: ruta (), función callback (que hará)
+// 2 componentes de una petición: ruta (), función  del Callback (que hará)
 
 // POST
 router.post("/newUser/:name/:email/:password", function(req,res){

@@ -1,4 +1,5 @@
 import { DataTypes } from 'sequelize';
+import bcrypt from 'bcrypt'
 import db from '../db/db.js'
 
 const Usuario = db.define('usuarios',{
@@ -8,7 +9,8 @@ const Usuario = db.define('usuarios',{
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     password: {
         type: DataTypes.STRING,
@@ -16,6 +18,14 @@ const Usuario = db.define('usuarios',{
     },
     token: DataTypes.STRING,
     confirmado: DataTypes.BOOLEAN
-})
+}, {
+    hooks: {
+        beforeCreate: async function(usuario){
+            // Generamos la clave para el hasheo, se recomiendan 10 rondas de aleatorización para no consumir demasiados recursos de hardware y hacer lento el proceso.
+            const salt = await bcrypt.genSalt(10)
+            usuario.password = await bcrypt.hash( usuario.password, salt)
+        }
+    }}
+)
 
 export default Usuario

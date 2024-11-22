@@ -13,6 +13,12 @@ import db from './db/db.js';
 // Crear la app
 const app = express(); 
 
+// Habilitar Cookie Parser
+app.use(cookieParser())
+
+// Habilitar CSRF
+app.use(csrf({cookie:true}))
+
 // Conexión a la BD
 try {
     await db.authenticate();
@@ -43,9 +49,3 @@ app.listen(port, ()=>{
 // Routing - Enrutamiento para peticiones
 app.use('/',generalRoutes);
 app.use('/usuario',userRoutes);
-
-// Habilitar Cookie Parser
-app.use(cookieParser())
-
-// Habilitar CSRF
-app.use(csrf({cookie:true}))

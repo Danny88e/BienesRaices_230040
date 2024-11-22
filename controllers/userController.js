@@ -3,19 +3,19 @@ import { generateId } from '../helpers/token.js'
 import Usuario from "../models/Usuario.js"
 import { emailRegister } from '../helpers/emails.js'
 import dotenv from 'dotenv'
-import req from 'express/lib/request.js'
-import { response } from 'express'
+import csurf from 'csurf'
 dotenv.config({path: '.env'})
 
 const formularioLogin = (request, response) => 
     response.render('auth/login',{
-    pagina: "Inicia sesión"
-})
+        pagina: "Inicia sesión"
+    }
+)
 
 const formularioRegister = (request, response) => 
-    console.log(request.csrfToken())
     response.render('auth/register',{
-        pagina: "Crea tu cuenta"
+        pagina: "Crea tu cuenta",
+        csrfToken: request.csrfToken()
     }
 )
 
@@ -58,6 +58,7 @@ const formularioRegistrar = async (request, response) => {
         nombre,
         email,
         password,
+        csrf: request.csrfToken(),
         token: generateId()
     })
     // Envia email de confirmación

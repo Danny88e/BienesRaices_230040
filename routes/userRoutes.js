@@ -1,5 +1,5 @@
 import express from 'express';
-import { formularioLogin, formularioRegister, formularioRegistrar, formularioPasswordRecovery } from '../controllers/userController.js';
+import { formularioLogin, formularioRegister, formularioRegistrar, formularioPasswordRecovery, confirm } from '../controllers/userController.js';
 const router = express.Router();
 
 // GET
@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/findByID/:id", function (request,response){
     response.send(`Se esta solicitando buscar al usuario con ID: ${request.params.id}`)
 })
-// 2 componentes de una petición: ruta (), función  del Callback (que hará)
+// 2 componentes de una petición: ruta (), función callback (que hará)
 
 // POST
 router.post("/newUser/:name/:email/:password", function(req,res){
@@ -38,6 +38,8 @@ router.delete("/deleteUser/:email",function(request,response){
 router.get("/login", formularioLogin /*middleware*/)
 router.get("/createAccount", formularioRegister /*middleware*/)
 router.post("/createAccount", formularioRegistrar /*middleware*/)
+router.get("/confirmAccount/:token", confirm)
 router.get("/passwordRecovery", formularioPasswordRecovery /*middleware*/)
+
 
 export default router;

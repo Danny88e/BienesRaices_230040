@@ -6,10 +6,29 @@ block contenido
             span.font-normal.text-am1-300  Raíces
         h2.text-center.font-extrabold.text-2xl=page
         if duplicado
-            div(class="max-w-md mx-auto my-10")
+            div(class="tn-box tn-box-color-1 animate-fadeOut")
+                p=duplicado
+                div(class="tn-progress animate-runProgress")
+            script.
+                const alertBox = document.querySelector('.tn-box');
+                alertBox.addEventListener('animationend', () => {
+                alertBox.style.display = 'none';
+                });
+            //div(class="max-w-md mx-auto my-10")
                 p.bg-alertcoloro.text-white.text-xs.text-center.p-2.mb-1.font-bold=duplicado
-        if errores 
-            div(class="max-w-md mx-auto my-10")
+        if errores
+            each error in errores 
+                div(class="tn-box tn-box-color-0 animate-fadeOut")
+                    p=error.msg
+                    div(class="tn-progress animate-runProgress")
+            script.
+                const alertBoxes = document.querySelectorAll('.tn-box'); // Select all tn-box elements
+                alertBoxes.forEach(alertBox => {
+                    alertBox.addEventListener('animationend', () => {
+                    alertBox.style.display = 'none'; // Hide the alert box after the animation
+                    });
+                });
+            //div(class="max-w-md mx-auto my-10")
                 each error in errores 
                     p.bg-alertcolorr.text-white.uppercase.text-xs.text-center.p-2.mb-1.font-bold=error.msg
                     
@@ -19,6 +38,7 @@ block contenido
         .mt-8.mx-auto.max-w-md 
             .bg-white.py-8.px-4.shadow 
                 form(method="POST" action="/usuario/createAccount" noValidate).space-y-5.px-6
+                    input(type="hidden" name="_csrf" value=csrfToken)
                     div 
                         label.block.text-sm.uppercase.text.-gray-600.mb-2.font-bold Nombre Completo: 
                         input#name.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="text" placeholder="Ingresa tu nombre con apellidos" name="nombre" value=usuario ? usuario.nombre : '')
@@ -35,4 +55,4 @@ block contenido
                     .flex.items-center.justify-between
                         a.text-gray-500.text-xs(href="/usuario/login" class="hover:underline hover:decoration-2 hover:decoration-am1-900") ¿Ya tienes cuenta? Inicia Sesión 
                         a.text-gray-500.text-xs(href="/usuario/passwordRecovery" class="hover:underline hover:decoration-2 hover:decoration-am1-900") Olvide mi contraseña...
-                    input(class="w-full bg-am1-300 hover:bg-am1-400 text-white font-bold py-3 cursor-pointer text-center" type="submit" value="Crear Cuenta") 
+                    input(class="w-full bg-am1-300 hover:bg-am1-400 text-white font-bold py-3 cursor-pointer text-center animate-fadedown" type="submit" value="Crear Cuenta") 

@@ -1,8 +1,11 @@
 import express from 'express';
+
 const router = express.Router();
+
 router.get("/", function(req,res){
-    res.send("Hola desde la Web, en NodeJS")
+    res.redirect('/usuario/login')
 })
+
 router.get("/quienEres", function(req,res){
     res.json(
         {
@@ -13,4 +16,5 @@ router.get("/quienEres", function(req,res){
         }
     )
 });
+
 export default router; // Esta palabra reservada de JS me permite exportar los elementos

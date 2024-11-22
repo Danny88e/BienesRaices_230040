@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hesuh05/BienesRaices_230028.git"
+    "url": "git+https://github.com/Danny88e/BienesRaices_230040.git"
   },
   "keywords": [
     "MVC",
@@ -29,9 +29,9 @@
   "author": "Jesús Domínguez Ramírez",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hesuh05/BienesRaices_230028/issues"
+    "url": "https://github.com/Danny88e/BienesRaices_230040/issues"
   },
-  "homepage": "https://github.com/hesuh05/BienesRaices_230028#readme",
+  "homepage": "https://github.com/Danny88e/BienesRaices_230040#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",

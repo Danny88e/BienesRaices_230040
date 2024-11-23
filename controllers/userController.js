@@ -30,24 +30,26 @@ const formularioRegistrar = async (request, response) => {
     // Verificar usuario no duplicado
     const existeUsuario = await Usuario.findOne({where : {email}})
     if (existeUsuario){
-        return response.render('auth/register.pug', {
+        return response.render('auth/register', {
             pagina: 'Crear Cuenta',
             duplicado: `EL EMAIL \"${email}\" YA ESTA ASOCIADO A UNA CUENTA!`,
             usuario : {
                 nombre,
                 email
-            }
+            },
+            csfrToken : request.csfrToken()
         })
     }
     //Validación
     if (!resultado.isEmpty()){
-        return response.render('auth/register.pug', {
+        return response.render('auth/register', {
             pagina: 'Crear Cuenta',
             errores: resultado.array(),
             usuario : {
                 nombre,
                 email
-            }
+            },
+            csrfToken : request.csrfToken()
         })
         /*response.json(resultado.array())
         response.json(resultado.array())

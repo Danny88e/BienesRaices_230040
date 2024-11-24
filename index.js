@@ -1,26 +1,53 @@
-// Ejemplo de activación de HOT RELOAD
-// npm i -D nodemon
-// agregar a package.json 
-
+//ECMA Sript 6
+// commin JS
 
 import express from 'express';
 import generalRoutes from './routes/generalRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-const app = express(); 
+import db from './db/db.js';
+import csrf from 'csurf'
+import cookieParser from 'cookie-parser';
 
-app.set('view engine','pug')
-app.set('views','./views')
-// Definir la carpeta pública de recursos estáticos (assets)
-app.use(express.static('public'))
+//const express = require('express'); //DECLARANDO UN OBJETO QUE VA A PERMITIR LEER PAGINAS ETC.importar la libreria para crear un servidor web
 
-// COnfiguramos nuestro servidor web
-const port = 3000;
-app.listen(port, ()=>{
-    console.log(`La aplicación ha iniciado en el puerto: ${port}`);
-});
+//INSTANCIAR NUESTRA APLICACIÓN WEB
+//conexion a la Base de Datos
+try{
+  await db.authenticate(); //verifico las credenciales del usuario 
+  db.sync();
+  console.log('Conexion Correcta a la Base DE Datos')
+}catch(error){
+  console.log(error)
+}
 
-// Routing - Enrutamiento para peticiones
+
+const app = express();
+//Definir la carpeta pública de recursos estáticos (assets)
+app.use(express.static('./public'));
+
+// Habilitar la lectura de datos desde formularios
+app.use(express.urlencoded({ extended: true }));
+
+//Habilitar Cookie Parser
+app.use(cookieParser())
+
+//Habilitar CSRF
+app.use(csrf({cookie:true}))
+
+//Routing - Enrutamiento
 app.use('/',generalRoutes);
-app.use('/usuario',userRoutes);
+app.use('/auth/', userRoutes);
+//Probamos rutas para poder presentar mensajes al usuario a través del navegador
 
-//
+
+//Habilitar pug
+//Set es para hacer configuraciones
+app.set('view engine','pug')
+app.set('views','./views')//se define donde tendrá el proyecto las vistas
+//auth -> auntentificación
+
+//CONFIGURAMOS NUESTRO SERVIDOR WEB (puerto donde estara escuchando nuestro sitio web)
+const port = process.env.PORT ||3000;
+app.listen(port, () => {
+  console.log(`La aplicación ha iniciado en el puerto: ${port}`);  
+});

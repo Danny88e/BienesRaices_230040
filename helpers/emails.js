@@ -1,9 +1,9 @@
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
-dotenv.config({path: '.env'})
+dotenv.config({ path: '.env' })
 
-const emailRegister = async (data) =>{
-    var transport = nodemailer.createTransport({
+const emailRegister = async (data) => {
+  const transport = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
     auth: {
@@ -11,7 +11,9 @@ const emailRegister = async (data) =>{
       pass: process.env.EMAIL_PASS
     }
   });
-  const {email, nombre, token    } = data
+
+  const { email, nombre, token } = data;
+
   // Enviar al email
   await transport.sendMail({
     from: 'BienesRaices.com',
@@ -19,86 +21,102 @@ const emailRegister = async (data) =>{
     subject: 'Confirma tu cuenta en BienesRaices.com',
     text: 'Confirma tu Cuenta en BienesRaices.com',
     html: `
-        <!DOCTYPE html>
-<html>
-<head>
-<title>HTML CSS JS</title>
-</head>
-<style>
-  h1 {
-    font-family: Optima, sans-serif;
-    font-weight: bold;
-  }
-  #user {
-    font-family: font-family: system-ui;
-  }
-  #title {
-    display: flex;
-    justify-content: center;
-    display: block;
-    flex-direction: row;
-    background-color: #5C3E93;
-    padding: 40;
-    border-radius: 40px;
-    margin: 20;
-    box-shadow: 0px 5px 20px 0.1px black;
-  }
-  #title_content {
-    text-align: center;
-    color: #F5F2FB;
-  }
-  #content {
-    background-color: #C8B7E9;
-    border-radius: 40px;
-    padding-bottom: 15;
-    padding:10;
-  }
-  #welcome_message {
-    display: flex;
-    justify-content: center;
-    font-size:30px
-  }
-  #lower_message {
-    background-color: #F7F2FF;
-    border-radius: 50px;
-    padding: 25px;
-    font-family: Verdana, sans-serif;
-  } 
-  #instructions {
-    font-size:20px
-  }
-</style>
-<body>
-<div id="content">
-  <div id="title">
-    <h1 id="title_content" style="flex-shrink:0">Bienes Raices</h1>
-    <img href="/public/images/real-estate.png">
-  </div>
-  <div id="lower_message">
-    <h1 style="flex-shrink:0">Email de verificación</h1>
-    <div id="welcome_message">
-      <p id="welcome0" style="flex-shrink:1">¡Te damos la bienvenida a Bienes Raices <span style="font-weight: bold">${nombre}</span>!</p>
-    </div>
-    <p id="instructions">Para continuar, solo verificar tu cuenta solo da click en el siguiente enlace:</p>
-    <a href="${process.env.BACKEND_DOMAIN}:${process.env.BACKEND_PORT}/usuario/confirmAccount/${token}" style="display:flex; justify-content: center;">Confirmar Cuenta</a>
-    <p>Si tu no te registraste a esta página, ignora este correo.</p>
-  </div>
-  <div id="signature" style="background-color: white; border-radius: 20px; margin-top: 20px; margin-bottom: 20px; text-align: center;">
-	  <p style="color: gray"> © Bienes Raices XJ. Derechos Reservados</p>
-	  <div>
-		<a href="#">Visítanos</a>
-		<a href="#">Contacto</a>
-		<a href="#">Términos y Condiciones</a>
-        <a href="#">Acerca de Nosotros</a>
-	  </div>
-  </div>
-</div>
-</body>
-</html>
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Confirmación de Cuenta</title>
+        <style>
+          body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+          }
+          .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          }
+          .header {
+            text-align: center;
+            background-color: #5C3E93;
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+          }
+          .header h1 {
+            font-family: 'Optima', sans-serif;
+            font-weight: bold;
+            margin: 0;
+          }
+          .content {
+            padding: 20px;
+            text-align: center;
+            color: #555;
+          }
+          .content p {
+            font-size: 16px;
+            line-height: 1.6;
+          }
+          .btn {
+            background-color: #5C3E93;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+          }
+          .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: gray;
+          }
+          .footer a {
+            color: #5C3E93;
+            text-decoration: none;
+            margin: 0 10px;
+          }
+          .footer a:hover {
+            text-decoration: underline;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Bienes Raices</h1>
+          </div>
+          <div class="content">
+            <h2>¡Hola, ${nombre}!</h2>
+            <p>Gracias por registrarte en <strong>Bienes Raices</strong>, tu plataforma de confianza para encontrar la propiedad de tus sueños.</p>
+            <p>Para completar tu proceso de registro, necesitamos que verifiques tu cuenta. La verificación es un paso importante para asegurarnos de que tus datos son correctos y para poder ofrecerte el mejor servicio posible.</p>
+            <p>Haz clic en el siguiente botón para confirmar tu cuenta. Una vez lo hagas, podrás acceder a todas las funcionalidades de nuestra plataforma y comenzar a explorar opciones de bienes raíces.</p>
+            <a href="${process.env.BACKEND_DOMAIN}:${process.env.BACKEND_PORT}/auth/confirmAccount/${token}" class="btn">Confirmar Cuenta</a>
+            <p>Si no te registraste en nuestro sitio web o crees que este correo es un error, por favor ignóralo. No te preocupes, no se hará ningún cambio en tu cuenta.</p>
+          </div>
+          <div style="text-align:center">
+            <p><strong>Atentamente,</strong></p>
+            <p><strong>Luis Daniel Suarez Escamilla</strong></p>
+          </div>
+          <div class="footer">
+            <p style="margin-top: 20px;">Firma:</p>
+            <p>&copy; 2024 Bienes Raices 23004. Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </body>
+      </html>
     `
   })
 }
 
-export {
-    emailRegister
-}
+export { emailRegister }

@@ -4,24 +4,31 @@ block contenido
     .py-10 
         h1.text-center.text-4xl.my-10.font-extrabold.text-Rosewood Bienes
             span.font-normal.text-black Raíces
-        h2.text-center.font-extrabold.text-2xl=page
+        h2.text-center.font-extrabold.text-2xl= page
         .mt-8.mx-auto.max-w-md 
             .bg-white.py-8.px-4.shadow 
-                form(method='POST' action='/usuario/createAccount' noValidate).space-y-5.px-6
+                form(method='POST' action='/auth/createAccount' noValidate).space-y-5.px-6
                     input(type="hidden" name="_csrf" value=csrfToken)
+                    if errores && errores.length > 0
+                        .bg-red-200.px-4.py-2.rounded-xl
+                            ul
+                                each error in errores
+                                    li= error.msg
                     div 
-                        label.block.text-sm.uppercase.text.-gray-600.mb-2.font-bold Nombre Completo: 
-                        input#name.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="text" placeholder="Ingresa tu nombre con apellidos" name="nombre_usuario")
+                        label.block.text-sm.uppercase.text-gray-600.mb-2.font-bold Nombre Completo: 
+                        input#name.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="text" placeholder="Ingresa tu nombre con apellidos" name="nombre_usuario" value=usuario.nombre)
                     div 
                         label.block.text-sm.uppercase.text-gray-600.mb-2.font-bold Correo Electrónico: 
-                        input#email.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="email" placeholder="ej: usuario@dominio.com" name="correo_usuario")
+                        input#email.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="email" placeholder="ej: usuario@dominio.com" name="correo_usuario" value=usuario.email)
                     div 
                         label.block.text-sm.uppercase.text-gray-600.mb-2.font-bold Contraseña: 
                         input#password.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="password" placeholder="Mínimo de 8 carácteres" name="pass_usuario")
                     div 
                         label.block.text-sm.uppercase.text-gray-600.mb-2.font-bold Confirmación Contraseña: 
                         input#password-confirm.w-full.px-3.py-2.border.border-gray-300.rounded-xl.placeholder.gray-400(type="password" placeholder="Mínimo de 8 carácteres, igual a la anterior" name="pass2_usuario")
+
                     .flex.items-center.justify-between
-                        a.text-gray-500.text-xs(href="/usuario/login" class="hover:underline hover:decoration-2 hover:decoration-Falured") ¿Ya tienes cuenta? Inicia Sesión 
-                        a.text-gray-500.text-xs(href="/usuario/passwordRecovery" class="hover:underline hover:decoration-2 hover:decoration-Falured") Olvide mi contraseña...
-                    input(class="w-full bg-Rosewood hover:bg-Auburn text-white font-bold py-3 cursor-pointer text-center" type="submit" value="Registrate")
+                        a.text-gray-500.text-xs(href="/auth/login" class="hover:underline hover:decoration-2 hover:decoration-Falured") ¿Ya tienes cuenta? Inicia Sesión 
+                        a.text-gray-500.text-xs(href="/auth/passwordRecovery" class="hover:underline hover:decoration-2 hover:decoration-Falured") Olvidé mi contraseña...
+                    
+                    input(class="w-full bg-Rosewood hover:bg-Auburn text-white font-bold py-3 cursor-pointer text-center" type="submit" value="Regístrate")

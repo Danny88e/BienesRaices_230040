@@ -18,16 +18,36 @@ const formularioRegister = (request, response) => {
     });
 };
 
+// Validación de la edad: debe ser mayor de 18 años
+const validarEdad = (fechaNacimiento) => {
+    const hoy = new Date();
+    const nacimiento = new Date(fechaNacimiento);
+    const edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const m = hoy.getMonth() - nacimiento.getMonth();
+
+    if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+        return edad - 1;
+    }
+    return edad;
+};
+
 const createNewUser = async (request, response) => {
     // Validación de campos
     await check('nombre_usuario').notEmpty().withMessage('El nombre no puede ir vacío!').run(request);
     await check('correo_usuario').isEmail().withMessage('Formato incorrecto para email!').run(request);
     await check('pass_usuario').isLength({ min: 6 }).withMessage('La contraseña debe ser de al menos 6 caracteres!').run(request);
     await check('pass2_usuario').equals(request.body.pass_usuario).withMessage('Las contraseñas no coinciden!').run(request);
+    await check('fecha_nacimiento').isDate().withMessage('Fecha de nacimiento inválida!').run(request); // Validar fecha de nacimiento
 
     let resultado = validationResult(request); 
-    const { nombre_usuario:nombre, correo_usuario:email, pass_usuario:password } = request.body; 
+    const { nombre_usuario:nombre, correo_usuario:email, pass_usuario:password, fecha_nacimiento } = request.body; 
     
+    // Validar si el usuario es mayor de edad
+    const edad = validarEdad(fecha_nacimiento);
+    if (edad < 18) {
+        resultado.errors.push({ msg: 'Debes ser mayor de 18 años para registrarte.' });
+    }
+
     // Si hay errores en la validación
     if (!resultado.isEmpty()) {
         return response.render('auth/register', {
@@ -35,7 +55,8 @@ const createNewUser = async (request, response) => {
             errores: resultado.array(),
             usuario: {
                 nombre,
-                email
+                email,
+                fecha_nacimiento
             },
             csrfToken: request.csrfToken()
         });
@@ -50,7 +71,8 @@ const createNewUser = async (request, response) => {
             duplicado: `EL EMAIL \"${email}\" YA ESTA ASOCIADO A UNA CUENTA!`,
             usuario: {
                 nombre: request.body.nombre_usuario,
-                email: request.body.correo_usuario
+                email: request.body.correo_usuario,
+                fecha_nacimiento: request.body.fecha_nacimiento
             },
         });
     }
@@ -60,6 +82,7 @@ const createNewUser = async (request, response) => {
         nombre,
         email,
         password,
+        fecha_nacimiento, // Guardar la fecha de nacimiento
         token: generateId()
     });
 
@@ -78,7 +101,6 @@ const createNewUser = async (request, response) => {
         email: email
     });
 };
-
 // Formulario para recuperar contraseña
 const formularioPasswordRecovery = (request, response) => {
     response.render('auth/passwordRecovery', {

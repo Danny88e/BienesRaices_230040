@@ -135,4 +135,33 @@ const confirm = async (request, response) => {
     });
 };
 
-export { formularioLogin, formularioRegister, createNewUser, formularioPasswordRecovery, confirm };
+const verifyTokenPassword = async (request,response)=>{
+const {token} = request.params;
+const userTokenOwner = await Usuario.findOne({where: {token}})
+if (!userTokenOwner){
+response.render('templates/mensaje',{
+    page: 'Error',
+    message1: "El token ha expirado o no existe"
+})
+}
+// Mostrar un formulario para modificar el password
+response.render('auth/reset-password'),{
+page: "Restauración de contraseña",
+csrfToken: request.csrfToken()
+}
+}
+const updatePassword = async (request,response) =>{
+    //Validar campos de contraseñas
+    await check('new_password').notEmpty().withMessage("La contraseña es un campo obligatorio").isLength({min:8}).withMessage("La contraseña debe ser de al menos 8 carácteres").run(request)
+    await check('confirm_new_password').equals(request.body.new_password).withMessage("La contraseña y su confirmación deben coincidir").run(request)
+    let result = validationResult(request)
+    if(!result.isEmpty()){
+        return response.render("auth/reset-password", {
+            page: 'Error al intentar crear la Cuenta de Usuario',
+            errors: result.array(),
+            csrfToken: request.csrfToken()
+        })
+    }
+};
+
+export { formularioLogin, formularioRegister, createNewUser, formularioPasswordRecovery, verifyTokenPassword, updatePassword, confirm };

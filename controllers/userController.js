@@ -136,3 +136,24 @@ const confirm = async (request, response) => {
 };
 
 export { formularioLogin, formularioRegister, createNewUser, formularioPasswordRecovery, confirm };
+//const paswordReset = asnyc(request, response) =>{
+    //
+    //console.log ("Validando los datos para la recuperacion de contasenia")
+    //
+    //await check('correo_usuario').noEmpty().withMessage("El correo electronico es un campo obligatorio.").isEmail().withMessage("El correo electronico no tiene el formato de: usuario@dominio.extension").run(request)
+    //let result = validationResult(request)
+    //
+    //if(!result.isEmpty())
+    //{
+    //return response.render("auth/passwordRecovery",{
+    //page:})
+    //
+    //
+    //}
+    //
+    //
+    //
+    //
+    //}
+    //
+    //

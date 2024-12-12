@@ -1,5 +1,5 @@
 import express from 'express';
-import { formularioLogin, formularioRegister, createNewUser, formularioPasswordRecovery, confirm } from '../controllers/userController.js';
+import { formularioLogin, formularioRegister, createNewUser, formularioPasswordRecovery, verifyTokenPassword, updatePassword, passwordReset, confirm } from '../controllers/userController.js';
 const router = express.Router();
 
 // GET
@@ -40,6 +40,9 @@ router.get("/createAccount", formularioRegister /*middleware*/)
 router.post("/createAccount", createNewUser /*middleware*/)
 router.get("/confirmAccount/:token", confirm)
 router.get("/passwordRecovery", formularioPasswordRecovery /*middleware*/)
+router.post("/passwordRecovery", passwordReset)
+router.get("/passwordRecovery/:token",verifyTokenPassword)
+router.post("/passwordRecovery/:token",updatePassword)
 
 
 export default router;

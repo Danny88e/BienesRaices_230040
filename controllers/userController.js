@@ -2,6 +2,8 @@ import { check, validationResult } from 'express-validator';
 import { generateId } from '../helpers/token.js';
 import Usuario from "../models/Usuario.js";
 import { emailRegister } from '../helpers/emails.js';
+import { emailChangePassword } from '../helpers/emails.js';
+
 
 // Formulario de login
 const formularioLogin = (request, response) => {
@@ -104,7 +106,8 @@ const createNewUser = async (request, response) => {
 // Formulario para recuperar contraseña
 const formularioPasswordRecovery = (request, response) => {
     response.render('auth/passwordRecovery', {
-        pagina: "Recuperar contraseña"
+        pagina: "Recuperar contraseña",
+        csrfToken : request.csrfToken()
     });
 };
 
@@ -118,7 +121,8 @@ const confirm = async (request, response) => {
             message: "Por favor verifica la liga, ya que el token no existe/caducó. Si aún no puedes acceder puedes restaurar tu cuenta en el siguiente enlace:",
             error: true,
             page: "Error de verificación",
-            link: `${process.env.BACKEND_DOMAIN}:${process.env.BACKEND_PORT}/usuario/passwordRecovery`
+            link: `${process.env.BACKEND_DOMAIN}:${process.env.BACKEND_PORT}/auth/passwordRecovery`
+            
         });
     }
 
@@ -131,29 +135,105 @@ const confirm = async (request, response) => {
     response.render('auth/confirmAccount', {
         page: 'Cuenta Confirmada',
         message: "La cuenta se ha confirmado de manera exitosa!",
-        link: `${process.env.BACKEND_DOMAIN}:${process.env.BACKEND_PORT}/usuario/passwordRecovery`
+        link: `${process.env.BACKEND_DOMAIN}:${process.env.BACKEND_PORT}/auth/passwordRecovery`
     });
 };
 
 export { formularioLogin, formularioRegister, createNewUser, formularioPasswordRecovery, confirm };
-//const paswordReset = asnyc(request, response) =>{
-    //
-    //console.log ("Validando los datos para la recuperacion de contasenia")
-    //
-    //await check('correo_usuario').noEmpty().withMessage("El correo electronico es un campo obligatorio.").isEmail().withMessage("El correo electronico no tiene el formato de: usuario@dominio.extension").run(request)
-    //let result = validationResult(request)
-    //
-    //if(!result.isEmpty())
-    //{
-    //return response.render("auth/passwordRecovery",{
-    //page:})
-    //
-    //
-    //}
-    //
-    //
-    //
-    //
-    //}
-    //
-    //
+
+const verifyTokenPassword = async (request,response)=>{
+const {token} = request.params;
+const userTokenOwner = await Usuario.findOne({where: {token}})
+if (!userTokenOwner){
+response.render('templates/mensaje',{
+    page: 'Error',
+    message1: "El token ha expirado o no existe"
+})
+}
+// Mostrar un formulario para modificar el password
+response.render('auth/reset-password',{
+    page: "Restauración de contraseña",
+    csrfToken: request.csrfToken()
+    })
+}
+const updatePassword = async (request,response) =>{
+    const {token} = request.params;
+    //Validar campos de contraseñas
+    await check('new_password').notEmpty().withMessage("La contraseña es un campo obligatorio").isLength({min:8}).withMessage("La contraseña debe ser de al menos 8 carácteres").run(request)
+    await check('confirm_new_password').equals(request.body.new_password).withMessage("La contraseña y su confirmación deben coincidir").run(request)
+    let result = validationResult(request)
+    if(!result.isEmpty()){
+        return response.render("auth/reset-password", {
+            page: 'Error al intentar crear la Cuenta de Usuario',
+            errors: result.array(),
+            csrfToken: request.csrfToken()
+        })
+    }
+    //Actualiazr la BD en pass
+    const userTokenOwner = await Usuario.findOne({where:{token}})
+        userTokenOwner.password=request.body.new_password
+        userTokenOwner.token=null
+        userTokenOwner.save()
+        return response.render("auth/confirmAccount",{
+            page: 'Contraseña cambiada exitosamente',
+            message: "La contraseña ha sido aactualizada",
+            link: `${process.env.BACKEND_DOMAIN}:${process.env.BACKEND_PORT}/auth/login`
+        })
+};
+
+const passwordReset = async (request, response) =>{
+    console.log("Validando los datos para la recuperación de la contraseña")
+    // Validación de los campos que se reciben del formulario
+    // Validación frontend (await)
+    await check('email').notEmpty().withMessage("El correo electrónico es un campo obligatorio.").run(request)
+    await check('email').isEmail().withMessage("El correo electrónico no tiene el formato de: usuario@dominio.extension").run(request)
+    let result = validationResult(request)
+
+    // Verificamos si hay errores de validación
+    if (!result.isEmpty()){
+        return response.render("auth/passwordRecovery",{
+            page : "Error al intentar resetear la contraseña",
+            errores: result.array(),
+            csrfToken: request.csrfToken()
+        })
+    }
+    
+    // Desestructurar los parámetros del request
+    const {email} = request.body
+
+    // Validación de BACKEND
+    // Verificar que el usuario no existe previamente en la bd
+    const existingUser = await Usuario.findOne({where: {email, confirmado:1}})
+
+    if (!existingUser)
+    {
+        return response.render("auth/passwordRecovery",{
+            page: "Error, no existe una cuenta autentificada asociada al correo electrónico ingresado",
+            csrfToken: request.csrfToken(),
+            errores: result.array(),
+            usuario: {
+                email
+            }
+        })
+    }
+        // Registramos los datos en la base de datos.
+        existingUser.password=" ";
+        existingUser.token = generateId();
+        existingUser.save();
+        // Enviar el correo de confirmación
+        emailChangePassword({
+            email: existingUser.email,
+            nombre: existingUser.nombre,
+            token: existingUser.token
+        })
+        response.render('templates/mensaje',{
+            page: 'Correo de solicitud de restauración de contraseña',
+            message1: "Hemos enviado un correo a: ",
+            message2: " para la restauración de la contraseña de la cuenta",
+            email: email,
+            csrfToken: request.csrfToken()
+        })
+}
+
+export { formularioLogin, formularioRegister, createNewUser, formularioPasswordRecovery, verifyTokenPassword, updatePassword, passwordReset, confirm };
+

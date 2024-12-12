@@ -1,16 +1,77 @@
 import { check, validationResult } from 'express-validator';
-import { generateId } from '../helpers/token.js';
+import { generateJWT, generateId } from '../helpers/token.js';
 import Usuario from "../models/Usuario.js";
 import { emailRegister } from '../helpers/emails.js';
 import { emailChangePassword } from '../helpers/emails.js';
+import { where } from 'sequelize';
 
 
 // Formulario de login
 const formularioLogin = (request, response) => {
     response.render('auth/login', {
+        csrfToken: request.csrfToken(),
         pagina: "Inicia sesión"
     });
 };
+
+const userAutentication = async(request,response) =>{
+    await check('correo_usuario').isEmail().withMessage('Formato incorrecto para email!').run(request);
+    await check('pass_usuario').isLength({ min: 6 }).withMessage('La contraseña debe ser de al menos 6 caracteres!').run(request);
+    let resultado = validationResult(request)
+    if (!resultado.isEmpty()) {
+        return response.render('auth/login', {
+            pagina: 'Iniciar Sesion',
+            errores: resultado.array(),
+            csrfToken: request.csrfToken()
+        });
+    }
+    const {email, password}= request.body
+    const usuario=await Usuario.findOne({where:{email}})
+    if (!usuario){
+        return response.render('auth/login', {
+            pagina: 'Iniciar Sesion',
+            errores: [{message:"El usuario no existe"}],
+            csrfToken: request.csrfToken()
+        });
+    }
+
+    if(!usuario.confirmado){
+        return response.render('auth/login',{
+            page: "Iniciar Sesion...",
+            csrfToken: request.csrfToken(),
+            errores: [{message: "Tu cuenta no ha sido confirmada"}]
+        })
+    }
+
+    //Revisar el Password
+    if(!usuario.verificarPassword(password)){
+        return response.render('auth/login',{
+            page: "Iniciar Sesion...",
+            csrfToken: request.csrfToken(),
+            errores: [{message: "El password es incorrecto"}]
+        })
+    }
+
+    //Autenticar el Usuario
+    const token= generateJWT({id:usuario.id, nombre: usuario.nombre})
+
+    console.log(token)
+
+    //Almacenar una Cookie
+
+    return response.cookie('_token', token,{
+        httpOnly: true,
+        secure: true,
+        sameSite: true
+    }).redirect('/my-propierties')
+
+
+    return response.cookie('_token',token,{
+        httpOnly: true,
+        secure: true,
+        sameSite: true
+    }).redirect('/my-propieties')
+}
 
 // Formulario de registro
 const formularioRegister = (request, response) => {
@@ -139,7 +200,6 @@ const confirm = async (request, response) => {
     });
 };
 
-export { formularioLogin, formularioRegister, createNewUser, formularioPasswordRecovery, confirm };
 
 const verifyTokenPassword = async (request,response)=>{
 const {token} = request.params;
@@ -235,5 +295,6 @@ const passwordReset = async (request, response) =>{
         })
 }
 
-export { formularioLogin, formularioRegister, createNewUser, formularioPasswordRecovery, verifyTokenPassword, updatePassword, passwordReset, confirm };
+export { formularioLogin, userAutentication, formularioRegister, createNewUser, formularioPasswordRecovery, verifyTokenPassword, updatePassword, passwordReset, confirm };
+
 

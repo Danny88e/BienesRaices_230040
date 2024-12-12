@@ -1,5 +1,5 @@
 import express from 'express';
-import { formularioLogin, formularioRegister, createNewUser, formularioPasswordRecovery, verifyTokenPassword, updatePassword, passwordReset, confirm } from '../controllers/userController.js';
+import { formularioLogin, userAutentication, formularioRegister, createNewUser, formularioPasswordRecovery, verifyTokenPassword, updatePassword, passwordReset, confirm } from '../controllers/userController.js';
 const router = express.Router();
 
 // GET
@@ -36,6 +36,7 @@ router.delete("/deleteUser/:email",function(request,response){
 })
 
 router.get("/login", formularioLogin /*middleware*/)
+router.post("/login", userAutentication)
 router.get("/createAccount", formularioRegister /*middleware*/)
 router.post("/createAccount", createNewUser /*middleware*/)
 router.get("/confirmAccount/:token", confirm)

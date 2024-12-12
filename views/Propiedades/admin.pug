@@ -1,0 +1,18 @@
+extends ../layout/index
+
+block contenido 
+    div.py-10
+        h1.text-4xl.my-10.font-extrabold.text-center.text-Rosewood Bienes
+            span.font-normal.text-black Raices
+        h2.text-center.text-2xl.font-extrabold=page
+        .mt-8.mx-auto.max-w-md
+            .alertas.w-full.mx-auto
+                if errores && errores.length > 0
+                    each error in errores
+                        .alerta.bg-red-200.px-4.py-2.rounded-xl
+                            .flex.items-center.justify-between
+                                ul
+                                    li= error.msg
+                                button.close-alert.text-gray-500.hover-text-gray-700.x-close
+                                    span.x-close &times;
+        
